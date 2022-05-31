@@ -1,9 +1,12 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { enterRoom } from '../features/appSlice';
 import { db } from '../firebase';
 
 const SideBarOption = ({ Icon, text, addChannelOption, id }) => {
-  
+ const dispatch = useDispatch();
+
   const addChannel = () => {
     const channelName = prompt('Please enter the channel name');
 
@@ -14,9 +17,13 @@ const SideBarOption = ({ Icon, text, addChannelOption, id }) => {
     }
   }
 
-  const selectChannel = () => {
-
-  }
+  const selectChannel = () => { 
+    if(id){
+      dispatch(enterRoom({
+        roomId: id
+      }));
+    }
+  };
 
   return (
     <SideBarOptionsContainer onClick={ addChannelOption ? addChannel : selectChannel } >
@@ -27,7 +34,7 @@ const SideBarOption = ({ Icon, text, addChannelOption, id }) => {
         </h3>) :
         (
           <SideBarOptionChannel>
-            <span>#</span> {text}
+            <h3><span>#</span> {text}</h3>
           </SideBarOptionChannel>
         )
       }
@@ -48,10 +55,6 @@ const SideBarOptionsContainer = styled.div`
     opacity: 0.9;
     background-color: #340e36;
   }
-
-`;
-
-const SideBarOptionChannel = styled.div`
   >h3 {
     font-weight: 500;
   }
@@ -59,4 +62,17 @@ const SideBarOptionChannel = styled.div`
   >h3 >span {
     padding: 0.938rem;  
   }
+`;
+
+const SideBarOptionChannel = styled.div`
+>h3 {
+    font-weight: 500;
+  }
+  
+  >h3 >span {
+    padding: 0.938rem;  
+  }
+  padding: 10px 0;
+  font-weight: 300;
+  align-items: center;
 `;
